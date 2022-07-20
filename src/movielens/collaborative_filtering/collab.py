@@ -23,8 +23,14 @@ class CollabFNet(nn.Module):
         x = self.lin2(x)
         return x
 
-PATH = '/Users/mokarakaya/develop/dataset/movielens/ml-100k/u.data'
-data = pd.read_csv(PATH, names=["user_id", "item_id", "rating", "timestamp"], header=None, delimiter='\t')
+
+PATH = "/Users/mokarakaya/develop/dataset/movielens/ml-100k/u.data"
+data = pd.read_csv(
+    PATH,
+    names=["user_id", "item_id", "rating", "timestamp"],
+    header=None,
+    delimiter="\t",
+)
 np.random.seed(3)
 msk = np.random.rand(len(data)) < 0.8
 df_train = data[msk].copy()
@@ -34,7 +40,7 @@ num_users = df_train["user_id"].max() + 1
 num_items = df_train["item_id"].max() + 1
 print(num_users, num_items)
 
-model = CollabFNet(num_users, num_items, emb_size=100) #.cuda()
+model = CollabFNet(num_users, num_items, emb_size=100)  # .cuda()
 
 
 def get_test_loss(model, unsqueeze=False):
@@ -49,13 +55,14 @@ def get_test_loss(model, unsqueeze=False):
     # print("test loss %.3f " % loss.item())
     return loss.item()
 
+
 def train_epocs(model, epochs=10, lr=0.01, wd=0.0, unsqueeze=False):
     optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=wd)
     for i in range(epochs):
         model.train()
-        users = torch.LongTensor(df_train["user_id"].values) # .cuda()
-        items = torch.LongTensor(df_train["item_id"].values) #.cuda()
-        ratings = torch.FloatTensor(df_train["rating"].values) #.cuda()
+        users = torch.LongTensor(df_train["user_id"].values)  # .cuda()
+        items = torch.LongTensor(df_train["item_id"].values)  # .cuda()
+        ratings = torch.FloatTensor(df_train["rating"].values)  # .cuda()
         if unsqueeze:
             ratings = ratings.unsqueeze(1)
         y_hat = model(users, items)
