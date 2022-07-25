@@ -8,7 +8,7 @@ import torch
 import time
 import numpy as np
 
-from src.nlp.util import get_device, set_seed
+from src.util import get_device, set_seed
 
 loss_fn = nn.CrossEntropyLoss()
 device = get_device()

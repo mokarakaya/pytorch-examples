@@ -3,6 +3,9 @@ import pandas as pd
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from src.util import get_device, set_seed
+
+device = get_device()
 
 
 class CollabFNet(nn.Module):
@@ -40,14 +43,14 @@ num_users = df_train["user_id"].max() + 1
 num_items = df_train["item_id"].max() + 1
 print(num_users, num_items)
 
-model = CollabFNet(num_users, num_items, emb_size=100)  # .cuda()
+model = CollabFNet(num_users, num_items, emb_size=100).to(device)  # .cuda()
 
 
 def get_test_loss(model, unsqueeze=False):
     model.eval()
-    users = torch.LongTensor(df_val["user_id"].values)  # .cuda()
-    items = torch.LongTensor(df_val["item_id"].values)  # .cuda()
-    ratings = torch.FloatTensor(df_val["rating"].values)  # .cuda()
+    users = torch.LongTensor(df_val["user_id"].values).to(device)
+    items = torch.LongTensor(df_val["item_id"].values).to(device)
+    ratings = torch.FloatTensor(df_val["rating"].values).to(device)
     if unsqueeze:
         ratings = ratings.unsqueeze(1)
     y_hat = model(users, items)
@@ -57,12 +60,13 @@ def get_test_loss(model, unsqueeze=False):
 
 
 def train_epocs(model, epochs=10, lr=0.01, wd=0.0, unsqueeze=False):
+    set_seed(42)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=wd)
     for i in range(epochs):
         model.train()
-        users = torch.LongTensor(df_train["user_id"].values)  # .cuda()
-        items = torch.LongTensor(df_train["item_id"].values)  # .cuda()
-        ratings = torch.FloatTensor(df_train["rating"].values)  # .cuda()
+        users = torch.LongTensor(df_train["user_id"].values).to(device)
+        items = torch.LongTensor(df_train["item_id"].values).to(device)
+        ratings = torch.FloatTensor(df_train["rating"].values).to(device)
         if unsqueeze:
             ratings = ratings.unsqueeze(1)
         y_hat = model(users, items)
@@ -75,4 +79,4 @@ def train_epocs(model, epochs=10, lr=0.01, wd=0.0, unsqueeze=False):
 
 
 train_epocs(model, epochs=1000, lr=0.001, wd=1e-6, unsqueeze=True)
-# 500 0.8916721940040588 0.9022499918937683
+# 999 0.8575757145881653 0.8811629414558411
