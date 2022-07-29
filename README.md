@@ -3,5 +3,6 @@
 - Pytorch Examples for different type of tasks.
 
 # Tasks
-- [Recommendation - Collaborative Filtering](/src/movielens/collaborative_filtering) 
-- [NLP - Fine tuning BERT for classification](src/nlp/clasification.py)
+- [Recommendation - Collaborative Filtering](/src/movielens/collaborative_filtering/collab.py) 
+- [NLP - Fine tuning BERT for Classification](src/nlp/clasification.py)
+- [NLP - Fine tuning XLM-RoBERTa for Named Entity Recognition](src/nlp/ner.py)

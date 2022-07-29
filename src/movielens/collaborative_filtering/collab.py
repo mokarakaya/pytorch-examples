@@ -78,5 +78,6 @@ def train_epocs(model, epochs=10, lr=0.01, wd=0.0, unsqueeze=False):
         print(i, loss.item(), current_test_loss)
 
 
-train_epocs(model, epochs=1000, lr=0.001, wd=1e-6, unsqueeze=True)
-# 999 0.8575757145881653 0.8811629414558411
+if __name__ == "__main__":
+    train_epocs(model, epochs=1000, lr=0.001, wd=1e-6, unsqueeze=True)
+    # 999 0.8575757145881653 0.8811629414558411
