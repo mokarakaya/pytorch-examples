@@ -12,6 +12,8 @@ set_seed()
 LEARNING_RATE = 1e-2
 EPOCHS = 5
 
+# Download data set from: https://www.kaggle.com/datasets/rajnathpatel/ner-data
+
 tokenizer = BertTokenizerFast.from_pretrained("bert-base-cased")
 
 
