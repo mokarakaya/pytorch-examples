@@ -6,6 +6,7 @@ import torch.nn.functional as F
 from src.util import get_device, set_seed
 
 device = get_device()
+MODEL_PATH = "data/models/collabfnet.pt"
 
 
 class CollabFNet(nn.Module):
@@ -27,7 +28,7 @@ class CollabFNet(nn.Module):
         return x
 
 
-PATH = "/Users/mokarakaya/develop/dataset/movielens/ml-100k/u.data"
+PATH = "~/develop/dataset/movielens/ml-100k/u.data"
 data = pd.read_csv(
     PATH,
     names=["user_id", "item_id", "rating", "timestamp"],
@@ -76,8 +77,10 @@ def train_epocs(model, epochs=10, lr=0.01, wd=0.0, unsqueeze=False):
         optimizer.step()
         current_test_loss = get_test_loss(model, unsqueeze)
         print(i, loss.item(), current_test_loss)
+    return model
 
 
 if __name__ == "__main__":
-    train_epocs(model, epochs=1000, lr=0.001, wd=1e-6, unsqueeze=True)
+    model = train_epocs(model, epochs=500, lr=0.001, wd=1e-6, unsqueeze=True)
+    torch.save(model.state_dict(), MODEL_PATH)
     # 999 0.8575757145881653 0.8811629414558411

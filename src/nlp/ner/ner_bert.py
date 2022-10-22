@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from torch.optim import SGD
 from src.util import get_device, set_seed
+from seqeval.metrics import f1_score
 
 device = get_device()
 set_seed()
@@ -178,7 +179,12 @@ def main():
             val_loss = total_loss_val / len(df_val)
 
             print(
-                f"Epochs: {epoch_num + 1} | Loss: {total_loss_train / len(df_train): .3f} | Accuracy: {total_acc_train / len(df_train): .3f} | Val_Loss: {total_loss_val / len(df_val): .3f} | Accuracy: {total_acc_val / len(df_val): .3f}"
+                f"Epochs: {epoch_num + 1} "
+                f"| Loss: {total_loss_train / len(df_train): .3f} "
+                f"| Accuracy: {total_acc_train / len(df_train): .3f} "
+                f"| Val_Loss: {total_loss_val / len(df_val): .3f} "
+                f"| Val_Accuracy: {total_acc_val / len(df_val): .3f}"
+                f"| Val_f1: {f1_score(label_clean, predictions): .3f}"
             )
 
     train_loop(model, df_train, df_val)
